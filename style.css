@@ -1,0 +1,9 @@
+.button-danger
+{
+  width: 100%;
+  display: inline-block;
+  padding: 10px;
+  background-color: #d9534f;
+  border: 1px solid #d9534f;
+  color: #fff !important;
+}

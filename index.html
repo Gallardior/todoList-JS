@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <title>Todo List</title>
+
+  <!-- BOOTSTRAP -->
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <!-- FONT AWESOME -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+  <!-- STYLES -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar navbar-light bg-light">
+    <a href="index.html">Product APP</a>
+  </nav>
+
+  <div class="container">
+    <!-- APLICACION -->
+    <div class="row pt-5" id="App">
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <span>Add a Product</span>
+          </div>
+          <form id="products-form" class="card-body">
+            <div class="form-group">
+              <input type="text" id="name" placeholder="Product Name" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="number" id="price" step="0.01" placeholder="Product price" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="number" id="year" value="2020" min="1990" max="2030" placeholder="Year Product" class="form-control">
+            </div>
+            <input type="submit" value="Save" class="btn btn-primary btn-block">
+          </form>
+        </div>
+      </div>
+      <div class="col-md-8" id="product-list">
+        <div class="card text-left mb-4">
+          <div class="card-body row">
+            <strong class="col"> Product</strong>
+            <strong class="col"> Price</strong> 
+            <strong class="col"> Year</strong> 
+            <strong class="col"></strong> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <script src="app.js"></script>
+</body>
+</html>
