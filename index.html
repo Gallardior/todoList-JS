@@ -6,22 +6,25 @@
   <title>Todo List</title>
 
   <!-- BOOTSTRAP -->
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
-  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="https://bootswatch.com/4/simplex/bootstrap.min.css">
+  
+
   <!-- FONT AWESOME -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
   <!-- STYLES -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <nav class="navbar navbar-light bg-light">
-    <a href="index.html">Product APP</a>
+  <nav class="navbar navbar-light bg-light mb-3">
+    <div class="container">
+      <h5>Product APP</h5>
+    </div>
   </nav>
 
-  <div class="container">
+  <div class="container appContainer">
     <!-- APLICACION -->
     <div class="row pt-5" id="App">
-      <div class="col-md-4">
+      <div class="col-md-4 mb-5">
         <div class="card">
           <div class="card-header">
             <span>Add a Product</span>
@@ -40,14 +43,16 @@
           </form>
         </div>
       </div>
-      <div class="col-md-8" id="product-list">
-        <div class="card text-left mb-4">
-          <div class="card-body row">
+      <div class="col-md-8 mb-5" id="product-list">
+        <div class="card container mb-4">
+          <div class="card-header row">
             <strong class="col"> Product</strong>
             <strong class="col"> Price</strong> 
             <strong class="col"> Year</strong> 
+            <strong class="col"></strong>
             <strong class="col"></strong> 
           </div>
+        
         </div>
       </div>
     </div>
