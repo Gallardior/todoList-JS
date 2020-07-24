@@ -5,6 +5,7 @@ class Product
     this.name = name,
     this.price = price,
     this.year = year
+    this.id = 0
   }
 }
 
@@ -17,12 +18,18 @@ class UI
 
   addProduct(product) 
   {
+    // GUARDAR EN LOCALSTORAGE
+    product.id = arrayProducts.length + 1
+    arrayProducts.push(product)
+    localStorage.setItem('products', JSON.stringify(arrayProducts))
+
+    // PINTAR EN PANTALLA
     const productList = document.getElementById('product-list')
     const element = document.createElement('div')
     element.classList.add('.card')
     element.classList.add('.mb-4')
     element.innerHTML = `
-    <div class="card-body row">
+    <div class="card-body row" id=${product.id}>
       <i class ="col mt-auto mb-auto">${product.name}</i> 
       <i class ="col mt-auto mb-auto">${product.price} $</i>
       <i class ="col mt-auto mb-auto">${product.year}</i> 
@@ -30,17 +37,29 @@ class UI
       <a class ="col btn mt-auto mb-auto fas fa-trash-alt" name="delete"></a> 
     </div>
     `
-
     productList.appendChild(element)
   }
 
   deleteProduct(product) 
   {
+    // ELIMINA DEL DOM
     if (product.target.name === "delete" || product.target.name === "edit") {
       let productToRemove = product.target.parentElement.parentElement
 
       productToRemove.remove()
     }
+    // ELIMINA DEL LOCALSTORAGE
+    let temp = JSON.parse(localStorage.getItem('products'))
+    for(let i = 0; i < temp.length; i++)
+    {
+      if(product.target.parentElement.id == temp[i].id)
+      {
+        temp.splice(i, 1)
+        localStorage.clear()
+        localStorage.setItem('products', JSON.stringify(temp))
+      }
+    }
+
   }
 
   editProduct(product) 
@@ -50,7 +69,7 @@ class UI
     let priceOld = productTarget.querySelectorAll(".mt-auto")[1].innerHTML  
     let yearOld = productTarget.querySelectorAll(".mt-auto")[2].innerHTML
     
-    priceOld = parseInt(priceOld.slice(0, -1)) 
+    priceOld = parseFloat(priceOld.slice(0, -1))
 
     document.getElementById('name').value = nameOld
     document.getElementById('price').value = priceOld
@@ -122,4 +141,23 @@ productList.addEventListener("click", e => {
     ui.showMessage('Edita a tu gusto en el formulario y vuelve a guardar', 'info')
   }
       
+})
+
+let arrayProducts = [];
+
+// LEER LOCALSTORAGE
+document.addEventListener('DOMContentLoaded', () => {
+  let arrayTemp = JSON.parse(localStorage.getItem('products'))
+
+  for(let i = 0; i< arrayTemp.length; i++)
+  {
+    let name = arrayTemp[i].name
+    let price = arrayTemp[i].price
+    let year = arrayTemp[i].year
+
+    let product = new Product(name,price,year)
+    const ui = new UI
+    ui.addProduct(product)
+  }
+
 })
