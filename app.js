@@ -1,10 +1,8 @@
-class Product
+class Task
 {
-  constructor(name,price,year)
+  constructor(name)
   {
-    this.name = name,
-    this.price = price,
-    this.year = year
+    this.name = name
     this.id = 0
   }
 }
@@ -16,66 +14,66 @@ class UI
     form.reset()
   }
 
-  addProduct(product) 
+  addTask(task) 
   {
     // GUARDAR EN LOCALSTORAGE
-    product.id = arrayProducts.length + 1
-    arrayProducts.push(product)
-    localStorage.setItem('products', JSON.stringify(arrayProducts))
+    task.id = arrayTasks.length + 1
+    arrayTasks.push(task)
+    localStorage.setItem('tasks', JSON.stringify(arrayTasks))
 
     // PINTAR EN PANTALLA
-    const productList = document.getElementById('product-list')
+    const taskList = document.getElementById('task-list')
     const element = document.createElement('div')
     element.classList.add('.card')
     element.classList.add('.mb-4')
     element.innerHTML = `
-    <div class="card-body row" id=${product.id}>
-      <i class ="col mt-auto mb-auto">${product.name}</i> 
-      <i class ="col mt-auto mb-auto">${product.price} $</i>
-      <i class ="col mt-auto mb-auto">${product.year}</i> 
-      <a class ="col btn mt-auto mb-auto fas fa-pen" name="edit"></a> 
-      <a class ="col btn mt-auto mb-auto fas fa-trash-alt" name="delete"></a> 
+    <div class="card-body row" id=${task.id}>
+      <i class ="tarea col-md-9 mt-auto mb-auto">${task.name}</i>
+      <a class ="text-right col btn mt-auto mb-auto fas fa-check" name="complete"></a> 
+      <a class ="text-right col btn mt-auto mb-auto fas fa-pen" name="edit"></a> 
+      <a class ="text-right col btn mt-auto mb-auto fas fa-trash-alt" name="delete"></a> 
     </div>
     `
-    productList.appendChild(element)
+    taskList.appendChild(element)
   }
 
-  deleteProduct(product) 
+  deleteTask(task) 
   {
     // ELIMINA DEL DOM
-    if (product.target.name === "delete" || product.target.name === "edit") {
-      let productToRemove = product.target.parentElement.parentElement
+    if ( task.target.name === "delete" || task.target.name === "edit" ) {
+      let taskToRemove = task.target.parentElement.parentElement
 
-      productToRemove.remove()
+      taskToRemove.remove()
     }
     // ELIMINA DEL LOCALSTORAGE
-    let temp = JSON.parse(localStorage.getItem('products'))
-    for(let i = 0; i < temp.length; i++)
+
+    arrayTasks = JSON.parse(localStorage.getItem('tasks'))
+    for(let i = 0; i < arrayTasks.length; i++)
     {
-      if(product.target.parentElement.id == temp[i].id)
+      if(task.target.parentElement.id == arrayTasks[i].id)
       {
-        temp.splice(i, 1)
+        arrayTasks.splice(i, 1)
         localStorage.clear()
-        localStorage.setItem('products', JSON.stringify(temp))
+        localStorage.setItem('tasks', JSON.stringify(arrayTasks))
       }
     }
 
   }
 
-  editProduct(product) 
+  editTask(task) 
   {
-    let productTarget = product.target.parentElement
-    let nameOld = productTarget.querySelectorAll(".mt-auto")[0].innerHTML
-    let priceOld = productTarget.querySelectorAll(".mt-auto")[1].innerHTML  
-    let yearOld = productTarget.querySelectorAll(".mt-auto")[2].innerHTML
-    
-    priceOld = parseFloat(priceOld.slice(0, -1))
+    let taskTarget = task.target.parentElement
+    let nameOld = taskTarget.querySelectorAll(".mt-auto")[0].innerHTML
 
     document.getElementById('name').value = nameOld
-    document.getElementById('price').value = priceOld
-    document.getElementById('year').value = yearOld
   }
-  
+  completeTask(task)
+  {
+    let target = task.target.parentElement.firstElementChild
+    // console.log(target)
+   
+    target.classList.toggle('complete')
+  }
   showMessage(message, classList) 
   {
     const div = document.createElement('div')
@@ -96,68 +94,69 @@ class UI
 
 // DOOM EVENTS
 
-let form = document.getElementById('products-form')
-let productList = document.getElementById('product-list')
+let form = document.getElementById('tasks-form')
+let taskList = document.getElementById('task-list')
   
-  // AGREGAR PRODUCTO
+  // AGREGAR TAREA
 form.addEventListener("submit", e => {
   e.preventDefault()
   
   let name = document.getElementById('name').value
-  let price = document.getElementById('price').value
-  let year = document.getElementById('year').value
-
-  let product = new Product(name,price,year)
+  let task = new Task(name)
   const ui = new UI
 
-  if( name === '' || price === '' || year === '')
+  if( name.trim() === '')
   {
-    ui.showMessage('Completa el formulario', 'info')
+    ui.showMessage('Por favor, escribe una tarea', 'info')
   }else
   {
-    ui.addProduct(product)
+    ui.addTask(task)
     ui.resetForm(form)
-    ui.showMessage('Producto agregado', 'success')
   }
 
 })
-  //ELIMINAR PRODUCTO
-productList.addEventListener("click", e => {
-  const ui = new UI
-  ui.deleteProduct(e)
-
-  if(e.target.name === 'delete') ui.showMessage('Producto eliminado', 'danger')
+  //ELIMINAR TAREA
+taskList.addEventListener("click", e => {
+  if(e.target.name === 'delete')
+  {
+    const ui = new UI
+    ui.deleteTask(e)
+  }
 })
 
-  //EDITAR PRODUCTO
-productList.addEventListener("click", e => {
-
-  const ui = new UI
-
+  // EDITAR TAREA
+taskList.addEventListener("click", e => {
   if(e.target.name === "edit")
   {
-    ui.editProduct(e)
-    ui.deleteProduct(e)
-    ui.showMessage('Edita a tu gusto en el formulario y vuelve a guardar', 'info')
+    const ui = new UI
+    ui.editTask(e)
+    ui.deleteTask(e)
   }
-      
 })
 
-let arrayProducts = [];
-
+  // COMPELTAR TAREA
+taskList.addEventListener("click", e => {
+  if(e.target.name === 'complete')
+  {
+    const ui = new UI
+    ui.completeTask(e)
+  }
+})  
+let arrayTasks = [];
+  
 // LEER LOCALSTORAGE
 document.addEventListener('DOMContentLoaded', () => {
-  let arrayTemp = JSON.parse(localStorage.getItem('products'))
+  let arrayTemp = JSON.parse(localStorage.getItem('tasks'))
 
   for(let i = 0; i< arrayTemp.length; i++)
   {
     let name = arrayTemp[i].name
-    let price = arrayTemp[i].price
-    let year = arrayTemp[i].year
-
-    let product = new Product(name,price,year)
+    let task = new Task(name)
     const ui = new UI
-    ui.addProduct(product)
+    ui.addTask(task)
   }
-
 })
+      
+
+
+
