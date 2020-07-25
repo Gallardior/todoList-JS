@@ -1,9 +1,10 @@
 class Task
 {
-  constructor(name)
+  constructor(name, complete = false)
   {
     this.name = name
     this.id = 0
+    this.complete = complete
   }
 }
 
@@ -24,8 +25,19 @@ class UI
     // PINTAR EN PANTALLA
     const taskList = document.getElementById('task-list')
     const element = document.createElement('div')
-    element.classList.add('.card')
-    element.classList.add('.mb-4')
+    element.classList.add('o-0')
+    if(task.complete === true)
+    {
+    element.innerHTML = `
+    <div class="card-body row" id=${task.id}>
+      <i class ="tarea col-md-9 mt-auto mb-auto complete">${task.name}</i>
+      <a class ="text-right col btn mt-auto mb-auto fas fa-check" name="complete"></a> 
+      <a class ="text-right col btn mt-auto mb-auto fas fa-pen" name="edit"></a> 
+      <a class ="text-right col btn mt-auto mb-auto fas fa-trash-alt" name="delete"></a> 
+    </div>
+    `
+    }else
+    {
     element.innerHTML = `
     <div class="card-body row" id=${task.id}>
       <i class ="tarea col-md-9 mt-auto mb-auto">${task.name}</i>
@@ -34,7 +46,11 @@ class UI
       <a class ="text-right col btn mt-auto mb-auto fas fa-trash-alt" name="delete"></a> 
     </div>
     `
+    }
     taskList.appendChild(element)
+    setTimeout(() => {
+      element.classList.remove('o-0')
+    }, 300);
   }
 
   deleteTask(task) 
@@ -43,7 +59,10 @@ class UI
     if ( task.target.name === "delete" || task.target.name === "edit" ) {
       let taskToRemove = task.target.parentElement.parentElement
 
-      taskToRemove.remove()
+      taskToRemove.classList.add('o-0')
+      setTimeout(() => {
+        taskToRemove.remove()
+      }, 500);
     }
     // ELIMINA DEL LOCALSTORAGE
 
@@ -67,13 +86,34 @@ class UI
 
     document.getElementById('name').value = nameOld
   }
+
   completeTask(task)
   {
+    // Pintar como completada
     let target = task.target.parentElement.firstElementChild
-    // console.log(target)
-   
     target.classList.toggle('complete')
+
+    // Guardar como completada
+    let targetId = parseInt(task.target.parentElement.id)
+
+    for(task of arrayTasks)
+    {
+      if(targetId === task.id)
+      {
+        if(task.complete === true)
+        {
+          task.complete = false
+        }else
+        {
+          task.complete = true
+        }
+
+      }
+    }
+    localStorage.clear()
+    localStorage.setItem('tasks', JSON.stringify(arrayTasks))
   }
+
   showMessage(message, classList) 
   {
     const div = document.createElement('div')
@@ -84,8 +124,17 @@ class UI
 
     const appContainer = document.querySelector('.appContainer')
     const app = document.querySelector('#App')
+    div.classList.add('o-0')
     appContainer.insertBefore(div, app)
-
+    // Animacion al mostrar mensaje
+    setTimeout(() => {
+      div.classList.remove('o-0')
+    }, 10);
+    // Animacion al eliminar mensaje
+    setTimeout(() => {
+      div.classList.add('o-0')
+    }, 2300);
+    // Eliminar del DOM
     setTimeout(() => {
       div.remove()
     }, 2500);
@@ -141,20 +190,24 @@ taskList.addEventListener("click", e => {
     const ui = new UI
     ui.completeTask(e)
   }
-})  
+}) 
+ 
 let arrayTasks = [];
   
 // LEER LOCALSTORAGE
 document.addEventListener('DOMContentLoaded', () => {
+
   let arrayTemp = JSON.parse(localStorage.getItem('tasks'))
 
   for(let i = 0; i< arrayTemp.length; i++)
   {
     let name = arrayTemp[i].name
-    let task = new Task(name)
+    let complete = arrayTemp[i].complete
+    let task = new Task(name, complete)
     const ui = new UI
     ui.addTask(task)
   }
+
 })
       
 
