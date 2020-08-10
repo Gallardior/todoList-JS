@@ -30,20 +30,20 @@ class UI
     {
     element.innerHTML = `
     <div class="card-body row" id=${task.id}>
-      <i class ="tarea col-md-9 mt-auto mb-auto complete">${task.name}</i>
-      <a class ="text-right col btn mt-auto mb-auto fas fa-check" name="complete"></a> 
-      <a class ="text-right col btn mt-auto mb-auto fas fa-pen" name="edit"></a> 
-      <a class ="text-right col btn mt-auto mb-auto fas fa-trash-alt" name="delete"></a> 
+      <i class ="tarea col-md-6 mt-auto mb-auto complete">${task.name}</i>
+      <a class ="text-center col btn mt-auto mb-auto fas fa-check" name="complete"></a> 
+      <a class ="text-center col btn mt-auto mb-auto fas fa-pen" name="edit"></a> 
+      <a class ="text-center col btn mt-auto mb-auto fas fa-trash-alt" name="delete"></a> 
     </div>
     `
     }else
     {
     element.innerHTML = `
     <div class="card-body row" id=${task.id}>
-      <i class ="tarea col-md-9 mt-auto mb-auto">${task.name}</i>
-      <a class ="text-right col btn mt-auto mb-auto fas fa-check" name="complete"></a> 
-      <a class ="text-right col btn mt-auto mb-auto fas fa-pen" name="edit"></a> 
-      <a class ="text-right col btn mt-auto mb-auto fas fa-trash-alt" name="delete"></a> 
+      <i class ="tarea col-md-6 mt-auto mb-auto">${task.name}</i>
+      <a class ="text-center col btn mt-auto mb-auto fas fa-check" name="complete"></a> 
+      <a class ="text-center col btn mt-auto mb-auto fas fa-pen" name="edit"></a> 
+      <a class ="text-center col btn mt-auto mb-auto fas fa-trash-alt" name="delete"></a> 
     </div>
     `
     }
